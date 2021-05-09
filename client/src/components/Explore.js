@@ -34,6 +34,10 @@ export default class Explore extends React.Component {
 	 	this.deleteFromArray = this.deleteFromArray.bind(this);
 		this.decadesFilter = this.deleteFilter.bind(this);
 		this.submitFilters = this.submitFilters.bind(this);
+		this.showAllIndustries = this.showAllIndustries.bind(this);
+		this.showAllSectors = this.showAllSectors.bind(this);
+		this.HideAllIndustries = this.HideAllIndustries.bind(this);
+		this.HideAllSectors = this.HideAllSectors.bind(this);
 		//this.selectIndustry = this.selectIndustry.bind(this);
 		//this.showSuggestions = this.showSuggestions.bind(this);
 	};
@@ -299,6 +303,48 @@ export default class Explore extends React.Component {
 		console.log("delete from array FINAL array: "+ filtersList);
 	}
 
+	showAllIndustries(){
+		let full = this.state.originalSuggestions;
+		for(var i = 0; i < full.length; i++){
+			if (full[i] == ""){
+				full.splice(i, 1);
+			}
+		}
+		this.setState({
+			suggestions: full
+			
+		});
+	}
+
+	HideAllIndustries(){
+		
+		this.setState({
+			suggestions: []
+			
+		});
+	}
+
+	HideAllSectors(){
+		
+		this.setState({
+			sectorSuggestions: []
+			
+		});
+	}
+	showAllSectors(){
+		let full = this.state.originalSectors;
+		for(var i = 0; i < full.length; i++){
+			if (full[i] == ""){
+				full.splice(i, 1);
+			}
+		}
+		
+		this.setState({
+			sectorSuggestions: full
+			
+		});
+	}
+
 	
 
 	submitFilters() {
@@ -371,7 +417,7 @@ export default class Explore extends React.Component {
 						<div className="h5  explore-category">Industry</div>
 							
 								<input type="text" name="industry-input" className="input-box" placeholder="search industries"
-									onChange={this.handleIndustryInputChange}/>
+									onChange={this.handleIndustryInputChange}/><button onClick={this.showAllIndustries}> Show All</button><button onClick={this.HideAllIndustries}>Hide</button>
 									{this.showSuggestions()}
 							
 							
@@ -391,7 +437,7 @@ export default class Explore extends React.Component {
 							<div className="h5 explore-category">Sector</div>
 							
 								<input type="text" name="sector-input" className="input-box" placeholder="search sectors"
-									onChange={this.handleSectorInputChange}/>
+									onChange={this.handleSectorInputChange}/> <button onClick={this.showAllSectors}> Show All</button><button onClick={this.HideAllSectors}> Hide</button>
 									{this.showSectorSuggestions()}
 								
 							<div className="selected-sectors">
