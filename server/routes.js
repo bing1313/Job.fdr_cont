@@ -4,26 +4,35 @@ const mysql = require('mysql');
 config.connectionLimit = 10;
 const connection = mysql.createPool(config);
 
-/* -------------------------------------------------- */
-/* ------------------- Route Handlers --------------- */
-/* -------------------------------------------------- */
-
-
-/* ---- Q1a (Dashboard) ---- */
-// Equivalent to: function getTop20Keywords(req, res) {}
-const getTop20Keywords = (req, res) => {
+const getTop10Companies = (req, res) => {
   var query = `
-    WITH kwd_count AS (
-        SELECT kwd_name, COUNT(*) AS cnt
-        FROM movie_keyword
-        GROUP BY kwd_name
-        ORDER BY COUNT(*) DESC
-    )
-  
-    SELECT kwd_name
-    FROM kwd_count
-    LIMIT 20
+      SELECT empName as companyName 
+      FROM (SELECT (name of company name column I think it is empName), COUNT(*) as numJobs 
+      From glassdoor 
+      Where empName is not null 
+      Group by empName
+      ORDER BY numJobs DESC) x
+      LIMIT 10;
   `;
+
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      console.log(rows);
+      res.json(rows);
+    }
+  });
+};
+  
+  const getTop10Locations = (req, res) => {
+    var query = `
+      SELECT maps.location as city 
+      FROM (SELECT maps.location COUNT(*) as numJobs 
+      From glassdoor 
+      Group by maps.location 
+      ORDER BY numJobs DESC) x
+      LIMIT 10;
+    `;
 
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -35,7 +44,7 @@ const getTop20Keywords = (req, res) => {
 };
 
 
-/* ---- Q1b (Dashboard) ---- */
+/* 
 const getTopMoviesWithKeyword = (req, res) => {
   var inputKeyword = req.params.keyword;
 
@@ -57,7 +66,6 @@ const getTopMoviesWithKeyword = (req, res) => {
 };
 
 
-/* ---- Q2 (Recommendations) ---- */
 const getRecs = (req, res) => {
   var inputMovie = req.params.movieName;
 
@@ -93,7 +101,6 @@ const getRecs = (req, res) => {
 };
 
 
-/* ---- Q3a (Best Movies) ---- */
 const getDecades = (req, res) => {
   const query = `
     SELECT CONCAT(LEFT(CAST(release_year AS varchar(4)), 3), '0') AS decade
@@ -109,7 +116,6 @@ const getDecades = (req, res) => {
 };
 
 
-/* ---- (Best Movies) ---- */
 const getGenres = (req, res) => {
   const query = `
     SELECT name
@@ -125,7 +131,6 @@ const getGenres = (req, res) => {
 };
 
 
-/* ---- Q3b (Best Movies) ---- */
 const bestMoviesPerDecadeGenre = (req, res) => {
   var inputDecade = req.query.decade;
   // Delete last digit
@@ -166,11 +171,14 @@ const bestMoviesPerDecadeGenre = (req, res) => {
   });
 };
 
+*/
+
 module.exports = {
-	getTop20Keywords: getTop20Keywords,
-	getTopMoviesWithKeyword: getTopMoviesWithKeyword,
-	getRecs: getRecs,
-  getDecades: getDecades,
-  getGenres: getGenres,
-  bestMoviesPerDecadeGenre: bestMoviesPerDecadeGenre
+	getTop10Companies: getTop10Companies,
+  getTop10Locations: getTop10Locations,
+	//getTopMoviesWithKeyword: getTopMoviesWithKeyword,
+	//getRecs: getRecs,
+  //getDecades: getDecades,
+  //getGenres: getGenres,
+  //bestMoviesPerDecadeGenre: bestMoviesPerDecadeGenre
 };

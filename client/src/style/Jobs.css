@@ -10,6 +10,58 @@
   height: 40px;
 }
 
-.searchResults .company, .searchResults .position, .searchResults .location, .searchResults .date, .headers .header {
+.results .company, .results .position, .results .location, .results .date, .headers .header {
   flex: 1 0 25%;
+}
+
+.search-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-content: stretch;
+  align-items: flex-start;
+}
+
+input {
+  min-width: 20px;
+  padding: 8px;
+  margin: 0 4px 0 0;
+  border: 1px solid #666;
+  border-radius: 30px;
+  height: 30px;
+}
+
+.submit-btn {
+  padding: 3px 25px;
+  min-height: 25px;
+  min-width: 15px;
+  word-wrap: nowrap;
+  background: #1abc9c;
+  color: #fff;
+  border: 1px solid #1abc9c;
+  border-radius: 30px;
+}
+
+input {
+    order: 0;
+    align-self: auto;  
+}
+
+.search-keyword {
+  flex: 2 1 auto;
+}
+
+.search-location {
+  flex: 1 1 auto;
+}
+
+.submit-btn {
+    order: 3;
+    flex: 0 1 auto;
+    align-self: auto;
+}
+
+.jumbotron {
+  background-color: #e3f3f0;
 }
