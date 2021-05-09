@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(cors({credentials: true, origin: 'http://localhost:8081'}));
+app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -27,5 +27,5 @@ app.get('/keywords/companies', routes.getTop10Companies);
 //app.get('/applications', routes.bestMoviesPerDecadeGenre);
 
 app.listen(8081, () => {
-	console.log(`Server listening on PORT 8081`);
+	console.log(`Server listening on PORT 3000`);
 });
