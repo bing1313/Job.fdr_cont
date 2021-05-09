@@ -335,10 +335,9 @@ export default class MyApplications extends React.Component {
 		// if (industries.length < 1 || sectors.length < 1 || size == ""){
 		// 	console.log("please fill out all fields");
 		// } 
-
+		let indStr = industries[0];
 		//create string 
 		if (industries.length > 1){
-			let indStr = industries[0]; 
 				for (var i = 1; i < industries.length; i++){
 					indStr += " OR \\`overview.industry\\' = \"" + industries[i] + "\"";
 			
