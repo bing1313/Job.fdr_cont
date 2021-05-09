@@ -347,7 +347,11 @@ export default class Explore extends React.Component {
 
 				<div className="container applications-container">
 					<div className="jumbotron">
-						<div className="h1 explore-title">Explore careers</div>
+						<div className="h1 explore-title">
+							Explore careers
+							<p className="h1 explore-title1">Please fill in all fields!</p>
+							</div>
+						
 
 						<div className="industry-container">
 						<div className="h5  explore-category">Industry</div>

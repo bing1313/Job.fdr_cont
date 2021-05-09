@@ -136,7 +136,9 @@ connection.query(query, function(err, rows, fields) {
 const getSize = (req, res) => {
   var query = `
    SELECT DISTINCT \`overview.size\` as size
-   from glassdoor 
+   FROM glassdoor 
+   WHERE \`overview.size\` != "Unknown"
+   ORDER BY LENGTH(\`overview.size\`)
   `;
 
 connection.query(query, function(err, rows, fields) {
