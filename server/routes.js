@@ -177,7 +177,7 @@ const bestMoviesPerDecadeGenre = (req, res) => {
 module.exports = {
 	getTop10Companies: getTop10Companies,
   getTop10Locations: getTop10Locations,
-  getIndustries: getIndustries
+ 
 	//getTopMoviesWithKeyword: getTopMoviesWithKeyword,
 	//getRecs: getRecs,
   //getDecades: getDecades,
