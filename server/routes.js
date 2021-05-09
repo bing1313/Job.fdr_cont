@@ -43,6 +43,93 @@ const getTop10Companies = (req, res) => {
   });
 };
 
+const getIndustries = (req, res) => {
+  console.log("getindustries routes");
+  var query = `
+   SELECT DISTINCT \`overview.industry\` as industryName
+   from glassdoor 
+  `;
+
+connection.query(query, function(err, rows, fields) {
+  if (err) console.log(err);
+  else {
+    console.log(rows);
+    res.json(rows);
+  }
+});
+};
+
+const getSectors = (req, res) => {
+  var query = `
+   SELECT DISTINCT \`overview.sector\` as sectorName
+   from glassdoor 
+  `;
+
+connection.query(query, function(err, rows, fields) {
+  if (err) console.log(err);
+  else {
+    console.log(rows);
+    res.json(rows);
+  }
+});
+};
+
+const getSize = (req, res) => {
+  var query = `
+   SELECT DISTINCT \`overview.size\` as size
+   from glassdoor 
+  `;
+
+connection.query(query, function(err, rows, fields) {
+  if (err) console.log(err);
+  else {
+    console.log(rows);
+    res.json(rows);
+  }
+});
+};
+
+const filter = (req, res) => {
+  var industries = req.params.industries;
+  // var sectors = req.params.sectors;
+  // var size = req.params.sectors;
+  console.log(typeof industries);
+  console.log("in filter");
+  console.log(industries);
+
+  var industSplit= industries.split(",");
+  //console.log(industSplit);
+
+  var industryStr = "";
+  if (industSplit.length > 1) {
+   
+    for (var i = 1; i < industSplit.length; i++){
+      industryStr += " OR \`overview.industry\` = \"" + industSplit[i] + "\"";
+    }
+  }
+
+  var industryStr = "\"" + industSplit[0] + "\"" + industryStr;
+  console.log(industryStr);
+
+  console.log(industryStr);
+  
+
+  var query = `
+   SELECT \`gaTrackerData.empName\` as name, \`header.jobTitle\` as position, 
+   \`map.location\` as location 
+   from glassdoor 
+   WHERE \`overview.industry\` = ${industryStr}
+  `;
+  console.log(query);
+
+connection.query(query, function(err, rows, fields) {
+  if (err) console.log(err);
+  else {
+    console.log(rows);
+    res.json(rows);
+  }
+});
+};
 
 
 const getTopJobsWithCompany = (req, res) => {

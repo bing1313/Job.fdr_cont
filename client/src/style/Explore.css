@@ -15,3 +15,19 @@
 .headers .header, .searchResults .company, .searchResults .position, .searchResults .location {
   flex: 1 0 25%;
 }
+
+.selInd {
+  margin-top: 20px;
+}
+
+.selectedIndustries {
+  margin-top: 20px;
+}
+
+.sector-container {
+  
+}
+
+.filBut {
+  background-color: #aae6cc;
+}
