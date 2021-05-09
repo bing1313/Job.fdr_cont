@@ -21,7 +21,7 @@ app.get('/jobs', routes.JobsPerTitleLocation);
 app.get('/industries', routes.getIndustries);
 app.get('/sectors', routes.getSectors);
 app.get('/size', routes.getSize);
-app.get('/filters/:industries', routes.filter); ///:sectors/:size
+app.get('/filters/:industries/:sector/:size', routes.filter); 
 
 
 app.listen(8081, () => {

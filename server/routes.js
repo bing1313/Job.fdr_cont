@@ -150,28 +150,40 @@ connection.query(query, function(err, rows, fields) {
 
 const filter = (req, res) => {
   var industries = req.params.industries;
-  // var sectors = req.params.sectors;
-  // var size = req.params.sectors;
+  var sector = req.params.sector;
+  var size = req.params.size;
 
   var industSplit= industries.split(",");
-
-
+  var sectorSplit = sector.split(",");
+ 
   var industryStr = "";
   if (industSplit.length > 1) {
-   
     for (var i = 1; i < industSplit.length; i++){
       industryStr += " OR \`overview.industry\` = \"" + industSplit[i] + "\"";
     }
   }
 
-  var industryStr = "\"" + industSplit[0] + "\"" + industryStr;
+  var industryStr = "(\`overview.industry\` = \"" + industSplit[0] + "\"" + industryStr + ")";
   
+
+  console.log(industryStr);
+
+  var sectorStr = "";
+  if (sectorSplit.length > 1) {
+    for (var i = 1; i < sectorSplit.length; i++){
+      sectorStr += " OR \`overview.sector\` = \"" + sectorSplit[i] + "\"";
+    }
+  }
+  var sectorStr = "AND (\`overview.sector\` = \"" + sectorSplit[0] + "\"" + sectorStr + ")";
+
+  var sizeStr = "AND (\`overview.size\` = \"" + size + "\")";
+ 
 
   var query = `
    SELECT \`gaTrackerData.empName\` as name, \`header.jobTitle\` as position, 
    \`map.location\` as location 
    from glassdoor 
-   WHERE \`overview.industry\` = ${industryStr}
+   WHERE ${industryStr} ${sectorStr} ${sizeStr}
   `;
 
 connection.query(query, function(err, rows, fields) {

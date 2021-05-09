@@ -28,3 +28,61 @@
 .filBut {
   background-color: #aae6cc;
 }
+
+.filter-submit-btn {
+  margin-top: 30px;
+  padding: 6px 25px;
+  min-height: 25px;
+  min-width: 15px;
+  word-wrap: nowrap;
+  background: #1abc9c;
+  color: #fff;
+  border: 1px solid #1abc9c;
+  border-radius: 30px;
+  font-size: 20px;
+}
+
+.explore-title{
+  background-color: #1abc9c;
+  text-align: center;
+  padding: 30px;
+  color: white;
+  
+}
+
+.explore-category{
+  font-size: 25px;
+}
+
+#sizeDropdown{
+  height: 30px;
+}
+
+.input-box{
+  margin-left: 40px;
+}
+
+.filBut{
+  background-color: #1abc9c;
+  height: 50px;
+  margin-top: 2%;
+  margin-left: 2%;
+  font-size: 18px;
+  padding-left: 4%;
+  padding-right: 4%;
+}
+
+.sector-container, .industry-container, .size-cont {
+  margin-top: 30px;
+}
+
+.option-filter{
+  margin-top: 1%;;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.del-btn{
+  margin-left: 10px;
+}
+

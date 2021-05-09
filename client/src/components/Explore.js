@@ -214,7 +214,7 @@ export default class Explore extends React.Component {
 			<div className="filterButton">
 			<ul>
 				{this.state.sectorSuggestions.map((item) => 
-					<button className="filBut" class="btn btn-success" onClick={this.selectSector.bind(this, item)}> {item} </button>)
+					<button className="filBut" onClick={this.selectSector.bind(this, item)}> {item} </button>)
 					}
 			</ul>
 			</div>
@@ -250,7 +250,6 @@ export default class Explore extends React.Component {
 
 		this.setState({
 			selectedSectors: picked,
-			sectorSuggestions: []
 		})
 	}
 
@@ -267,24 +266,29 @@ export default class Explore extends React.Component {
 	deleteFilter(item){
 
 	   let industryFilters = this.state.selectedIndustries;
-	
-	//    if (industryFilters.includes(item)){
-	// 		console.log("conatins");
 		   this.deleteFromArray(industryFilters, item);
-	//    } else {
-	// 	   console.log("doesn't contain");
-	//    }
 		  this.setState({
 			  selectedIndustries: industryFilters
 		  })
 	 	  this.showSuggestions();
 
 	}
+
+	deleteSectorFilter(item){
+		console.log("delete selection industries: " + this.state.selectedSectors); 
+		console.log("delete filter item" + item);
+	  	let sectorFilters = this.state.selectedSectors;
+
+		   this.deleteFromArray(sectorFilters, item);
+		  	console.log("return from delete sector " + sectorFilters);
+		  	this.setState({
+			  	selectedSectors: sectorFilters
+		  	})
+	 	  this.showSectorSuggestions();
+
+	}
 	
 	deleteFromArray(filtersList, item) {
-		console.log("delete from array item: " + item);
-		console.log("delete from array INITIAL array: "+ filtersList);
-
 		
 		for (var i=0; i < filtersList.length; i++){
 			if (filtersList[i] === item){
@@ -303,20 +307,12 @@ export default class Explore extends React.Component {
 		let size = this.state.selectedSize;
 
 		//make sure that they are all greater than 1
-		// if (industries.length < 1 || sectors.length < 1 || size == ""){
-		// 	console.log("please fill out all fields");
-		// } 
-		let indStr = industries[0];
-		//create string 
-		if (industries.length > 1){
-				for (var i = 1; i < industries.length; i++){
-					indStr += " OR \\`overview.industry\\' = \"" + industries[i] + "\"";
-			
-				}		
-		}
-		//"/" + sectors + "/" + size
+		if (industries.length < 1 || sectors.length < 1 || size == ""){
+			console.log("please fill out all fields");
+			return;
+		} 
 
-		fetch("http://localhost:8081/filters/" + industries,
+		fetch("http://localhost:8081/filters/" + industries + "/" + sectors + "/" + size,
 		{
 			method: 'GET'
 		}).then(res => {
@@ -329,7 +325,7 @@ export default class Explore extends React.Component {
 			
 			const jobDivs = jobsList.map((jobObj, i) =>
 				<ExploreRow 
-				 name={jobObj.name}
+				 company={jobObj.name}
 				 position={jobObj.position}
 				 location={jobObj.location}
 				/>
@@ -351,12 +347,12 @@ export default class Explore extends React.Component {
 
 				<div className="container applications-container">
 					<div className="jumbotron">
-						<div className="h5">Explore careers</div>
+						<div className="h1 explore-title">Explore careers</div>
 
 						<div className="industry-container">
-						<div className="h5">Industry</div>
+						<div className="h5  explore-category">Industry</div>
 							
-								<input type="text" name="industry-input"
+								<input type="text" name="industry-input" className="input-box" placeholder="search industries"
 									onChange={this.handleIndustryInputChange}/>
 									{this.showSuggestions()}
 							
@@ -364,8 +360,8 @@ export default class Explore extends React.Component {
 								{this.state.selectedIndustries.map((item) => {
 									return (
 										
-										<div className="industry-filter">{item}
-										<button type="button" onClick={this.deleteFilter.bind(this,item)}>Delete</button>
+										<div className="option-filter">{item}
+										<button type="button" className="del-btn" onClick={this.deleteFilter.bind(this,item)}>Delete</button>
 										</div>
 										
 									)
@@ -374,9 +370,9 @@ export default class Explore extends React.Component {
 						</div>
 
 						<div className="sector-container">
-							<div className="h5">Sector</div>
+							<div className="h5 explore-category">Sector</div>
 							
-								<input type="text" name="sector-input"
+								<input type="text" name="sector-input" className="input-box" placeholder="search sectors"
 									onChange={this.handleSectorInputChange}/>
 									{this.showSectorSuggestions()}
 								
@@ -384,8 +380,8 @@ export default class Explore extends React.Component {
 								{this.state.selectedSectors.map((item) => {
 									return (
 										
-										<div className="industry-filter">{item}
-										<button type="button" onClick={this.deleteFilter.bind(this,item)}>Delete</button>
+										<div className="option-filter ">{item}
+										<button type="button" className="del-btn" onClick={this.deleteSectorFilter.bind(this,item)}>Delete</button>
 										</div>
 										
 									)
@@ -393,9 +389,9 @@ export default class Explore extends React.Component {
 							</div>
 						</div>
 
-						<div className="h5">Company Size</div>
+						<div className="h5  explore-category size-cont">Company Size</div>
 						<div className="size drop-down">
-							<select value={this.state.selectedSize} onChange={this.handleSizeChange} className="dropdown" id="sizeDropdown">
+							<select value={this.state.selectedSize} onChange={this.handleSizeChange} className="dropdown input-box" id="sizeDropdown">
 								{this.state.sizes}
 							</select>
 							
