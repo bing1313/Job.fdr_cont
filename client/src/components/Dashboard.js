@@ -2,9 +2,9 @@ import React from 'react';
 import '../style/Dashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
-import KeywordButton from './KeywordButton';
+import KeywordButtonCompany from './KeywordButtonCompany';
+import KeywordButtonLocation from './KeywordButtonLocation';
 import DashboardResultRow from './DashboardResultRow';
-import axios from 'axios'
 
 export default class Dashboard extends React.Component {
   constructor(props) {
@@ -20,12 +20,9 @@ export default class Dashboard extends React.Component {
   };
 
   componentDidMount() {
-    axios.get('http://localhost:8081/keywords/companies').then((err, data) => {
-      console.log(data)
-    })
-    console.log("mountain")
-    fetch("http://localhost:8081/keywords/companies",
-    {
+
+    fetch("http://localhost:8081/keywords/companies", {
+      crossDomain: true,
       method: 'GET' 
     }).then(res => {
       console.log("fetched companies")
@@ -37,7 +34,7 @@ export default class Dashboard extends React.Component {
       if (!companiesList) return;
 
       const companiesDivs = companiesList.map((companyObj, i) =>
-        <KeywordButton 
+        <KeywordButtonCompany
           id={"button-" + companyObj.companyName} 
           onClick={() => this.showJobs(companyObj.companyName)} 
           company={companyObj.companyName} 
@@ -51,18 +48,19 @@ export default class Dashboard extends React.Component {
       console.log(err);
     });
 
-    fetch("http://localhost:8081/keywords/locations",
-    {
+    fetch("http://localhost:8081/keywords/locations", {
+      crossDomain: true,
       method: 'GET' 
     }).then(res => {
       return res.json();
     }, err => {
       console.log(err);
     }).then(locationsList => {
+      console.log(locationsList)
       if (!locationsList) return;
 
       const locationsDivs = locationsList.map((locationObj, i) =>
-        <KeywordButton 
+        <KeywordButtonLocation 
           id={"button-" + locationObj.city} 
           onClick={() => this.showJobs(locationObj.city)} 
           location={locationObj.city} 
@@ -81,7 +79,7 @@ export default class Dashboard extends React.Component {
 
   showJobs(keyword) {
 
-    fetch("https://localhost:8081/keywords/" + keyword, 
+    fetch("https://localhost:3000/keywords/" + keyword, 
     {
 			method: 'GET'
 		}).then(res => {

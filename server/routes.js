@@ -7,11 +7,11 @@ const connection = mysql.createPool(config);
 const getTop10Companies = (req, res) => {
   console.log('getting companies....')
   var query = `
-      SELECT gaTrackerData.empName as companyName 
-      FROM (SELECT gaTrackerData.empName, COUNT(*) as numJobs 
+      SELECT \`gaTrackerData.empName\` as companyName 
+      FROM (SELECT \`gaTrackerData.empName\`, COUNT(*) as numJobs 
       FROM glassdoor 
-      WHERE gaTrackerData.empName is not null 
-      GROUP BY gaTrackerData.empName
+      WHERE \`gaTrackerData.empName\` is not null 
+      GROUP BY \`gaTrackerData.empName\`
       ORDER BY numJobs DESC) x
       LIMIT 10;
   `;
@@ -27,10 +27,10 @@ const getTop10Companies = (req, res) => {
   
   const getTop10Locations = (req, res) => {
     var query = `
-      SELECT maps.location as city 
-      FROM (SELECT maps.location COUNT(*) as numJobs 
+      SELECT \`map.location\` as city 
+      FROM (SELECT \`map.location\`, COUNT(*) as numJobs 
       FROM glassdoor 
-      GROUP BY maps.location 
+      GROUP BY \`map.location\` 
       ORDER BY numJobs DESC) x
       LIMIT 10;
     `;
