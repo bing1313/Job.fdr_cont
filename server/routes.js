@@ -44,6 +44,74 @@ const getTop10Companies = (req, res) => {
   });
 };
 
+const getIndustries = (req, res) => {
+  console.log("getindustries routes");
+  var query = `
+   SELECT DISTINCT \`overview.industry\` as industryName
+   from glassdoor 
+  `;
+
+connection.query(query, function(err, rows, fields) {
+  if (err) console.log(err);
+  else {
+    console.log(rows);
+    res.json(rows);
+  }
+});
+};
+
+const getSectors = (req, res) => {
+  var query = `
+   SELECT DISTINCT \`overview.sector\` as sectorName
+   from glassdoor 
+  `;
+
+connection.query(query, function(err, rows, fields) {
+  if (err) console.log(err);
+  else {
+    console.log(rows);
+    res.json(rows);
+  }
+});
+};
+
+const getSize = (req, res) => {
+  var query = `
+   SELECT DISTINCT \`overview.size\` as size
+   from glassdoor 
+  `;
+
+connection.query(query, function(err, rows, fields) {
+  if (err) console.log(err);
+  else {
+    console.log(rows);
+    res.json(rows);
+  }
+});
+};
+
+const filter = (req, res) => {
+  var industries = req.params.industries;
+  // var sectors = req.params.sectors;
+  // var size = req.params.sectors;
+
+  console.log("in filter");
+
+  var query = `
+   SELECT \`gaTrackerData.empName\` as name, \`header.jobTitle\` as position, 
+   \`map.location\` as location 
+   from glassdoor 
+   WHERE \`overview.industry\` = "${industries}"
+  `;
+
+connection.query(query, function(err, rows, fields) {
+  if (err) console.log(err);
+  else {
+    console.log(rows);
+    res.json(rows);
+  }
+});
+};
 
 /* 
 const getTopMoviesWithKeyword = (req, res) => {
@@ -177,6 +245,10 @@ const bestMoviesPerDecadeGenre = (req, res) => {
 module.exports = {
 	getTop10Companies: getTop10Companies,
   getTop10Locations: getTop10Locations,
+  getIndustries: getIndustries,
+  getSectors: getSectors,
+  getSize: getSize,
+  filter: filter
  
 	//getTopMoviesWithKeyword: getTopMoviesWithKeyword,
 	//getRecs: getRecs,

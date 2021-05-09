@@ -11,7 +11,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/keywords/locations', routes.getTop10Locations);
 app.get('/keywords/companies', routes.getTop10Companies);
-
+app.get('/industries', routes.getIndustries);
+app.get('/sectors', routes.getSectors);
+app.get('/size', routes.getSize);
+app.get('/filters/:industries', routes.filter); ///:sectors/:size
 
 //app.get('/keywords/:keyword', routes.getTopMoviesWithKeyword);
 
@@ -27,5 +30,5 @@ app.get('/keywords/companies', routes.getTop10Companies);
 //app.get('/applications', routes.bestMoviesPerDecadeGenre);
 
 app.listen(8081, () => {
-	console.log(`Server listening on PORT 3000`);
+	console.log(`Server listening on PORT 8081`);
 });

@@ -5,10 +5,10 @@ export default class ApplicationsRow extends React.Component {
 	/* ---- Q3b (Best Movies) ---- */
 	render() {
 		return (
-			<div className="movieResults">
-				<div className="title">{this.props.title}</div>
-				<div className="id">{this.props.id}</div>
-				<div className="rating">{this.props.rating}</div>
+			<div className="applicationRow">
+				<div className="company-name">{this.props.name}</div>
+				<div className="position">{this.props.position}</div>
+				<div className="location">{this.props.location}</div>
 			</div>
 		);
 	};

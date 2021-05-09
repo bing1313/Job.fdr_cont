@@ -15,3 +15,19 @@
 .movie .header, .movieResults .title, .movieResults .id, .movieResults .rating {
   flex: 1 0 25%;
 }
+
+.selInd {
+  margin-top: 20px;
+}
+
+.selectedIndustries {
+  margin-top: 20px;
+}
+
+.sector-container {
+  
+}
+
+.filBut {
+  background-color: #aae6cc;
+}
