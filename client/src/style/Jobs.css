@@ -7,10 +7,11 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  height: 40px;
+  height: 60px;
+  padding: 0 10px;
 }
 
-.results .company, .results .position, .results .location, .results .date, .headers .header {
+.searchResults .company, .searchResults .position, .searchResults .industry, .searchResults .sector, .headers .header {
   flex: 1 0 25%;
 }
 
@@ -48,7 +49,7 @@ input {
     align-self: auto;  
 }
 
-.search-keyword {
+.search-title {
   flex: 2 1 auto;
 }
 
@@ -64,4 +65,15 @@ input {
 
 .jumbotron {
   background-color: #e3f3f0;
+}
+
+.headers .header{
+  flex-basis: 25%;
+}
+.searchResults {
+  margin: 10px 0;
+}
+.searchResults > div {
+  flex-basis: 25%;
+  line-height: 1.2rem;
 }

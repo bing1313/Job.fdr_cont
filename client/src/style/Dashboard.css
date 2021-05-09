@@ -33,7 +33,7 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  height: 30px;
+  height: 60px;
   padding: 10px;
 }
 
@@ -41,6 +41,6 @@
   flex: 1 0 30%;
 }
 
-.jobs-header .header, .item .company, .item .location {
-  flex: 1 0 25%;
+.jobs-header .header, .item .company, .item .location, .item .industry {
+  flex: 1 0 20%;
 }

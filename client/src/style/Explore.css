@@ -1,10 +1,10 @@
-.movies-container {
+.results-container {
   display: flex;
   flex-flow: column wrap;
   margin-top: 10px;
 }
 
-.movies-container .movie, .movies-container .movieResults {
+.header-container .headers, .results-container .searchResults {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
@@ -12,6 +12,6 @@
   padding: 0 10px;
 }
 
-.movie .header, .movieResults .title, .movieResults .id, .movieResults .rating {
+.headers .header, .searchResults .company, .searchResults .position, .searchResults .location {
   flex: 1 0 25%;
 }

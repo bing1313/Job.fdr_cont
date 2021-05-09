@@ -12,19 +12,16 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.get('/keywords/locations', routes.getTop10Locations);
 app.get('/keywords/companies', routes.getTop10Companies);
 
+app.get('/keywords/companies/:company', routes.getTopJobsWithCompany);
+app.get('/keywords/locations/:location', routes.getTopJobsWithLocation);
 
-//app.get('/keywords/:keyword', routes.getTopMoviesWithKeyword);
+app.get('/jobs', routes.JobsPerTitleLocation);
 
+app.get('/industries', routes.getIndustries);
+app.get('/sectors', routes.getSectors);
+app.get('/size', routes.getSize);
+app.get('/filters/:industries', routes.filter);
 
-//app.get('/jobs/:movieName', routes.getRecs);
-
-
-//app.get('/decades', routes.getDecades);
-//app.get('/genres', routes.getGenres);
-
-
-
-//app.get('/applications', routes.bestMoviesPerDecadeGenre);
 
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 3000`);

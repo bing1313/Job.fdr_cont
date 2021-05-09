@@ -7,8 +7,8 @@ export default class JobsRow extends React.Component {
 			<div className="searchResults">
 				<div className="company">{this.props.company}</div>
 				<div className="position">{this.props.position}</div>
-				<div className="location">{this.props.location}</div>
-				<div className="date">{this.props.date}</div>
+				<div className="location">{this.props.industry}</div>
+				<div className="sector">{this.props.sector}</div>
 			</div>
 		);
 	};

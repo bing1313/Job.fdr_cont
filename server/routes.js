@@ -5,12 +5,11 @@ config.connectionLimit = 10;
 const connection = mysql.createPool(config);
 
 const getTop10Companies = (req, res) => {
-  console.log('getting companies....')
   var query = `
-      SELECT \`gaTrackerData.empName\` as companyName 
+      SELECT \`gaTrackerData.empName\` as company
       FROM (SELECT \`gaTrackerData.empName\`, COUNT(*) as numJobs 
       FROM glassdoor 
-      WHERE \`gaTrackerData.empName\` is not null 
+      WHERE \`gaTrackerData.empName\` is not null AND \`gaTrackerData.empName\` <> ""
       GROUP BY \`gaTrackerData.empName\`
       ORDER BY numJobs DESC) x
       LIMIT 10;
@@ -27,7 +26,7 @@ const getTop10Companies = (req, res) => {
   
   const getTop10Locations = (req, res) => {
     var query = `
-      SELECT \`map.location\` as city 
+      SELECT \`map.location\` as location 
       FROM (SELECT \`map.location\`, COUNT(*) as numJobs 
       FROM glassdoor 
       GROUP BY \`map.location\` 
@@ -45,16 +44,36 @@ const getTop10Companies = (req, res) => {
 };
 
 
-/* 
-const getTopMoviesWithKeyword = (req, res) => {
-  var inputKeyword = req.params.keyword;
+
+const getTopJobsWithCompany = (req, res) => {
+  var inputCompany = req.params.company;
 
   var query = `
-    SELECT m.title, m.rating, m.num_ratings
-    FROM movie m JOIN movie_keyword k ON m.movie_id = k.movie_id
-    WHERE k.kwd_name = "${inputKeyword}"
-    ORDER BY rating DESC, num_ratings DESC
-    LIMIT 10 
+      SELECT \`gaTrackerData.empName\` AS company, \`header.jobTitle\` AS position, \`map.location\` AS location, \`overview.industry\` AS industry
+      FROM glassdoor
+      WHERE \`gaTrackerData.empName\` = "${inputCompany}" AND \`map.location\` <> "" AND  \`overview.industry\` <> ""
+      ORDER BY \`gaTrackerData.jobId.long\` DESC
+      LIMIT 100;
+  `;
+
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      console.log(rows);
+      res.json(rows);
+    }
+  });
+};
+
+const getTopJobsWithLocation = (req, res) => {
+  var inputLocation = req.params.location;
+
+  var query = `
+      SELECT \`gaTrackerData.empName\` AS company, \`header.jobTitle\` AS position, \`map.location\` AS location, \`overview.industry\` AS industry      
+      FROM glassdoor
+      WHERE \`map.location\` = "${inputLocation}" AND \`gaTrackerData.empName\` <> "" AND  \`overview.industry\` <> ""
+      ORDER BY \`gaTrackerData.jobId.long\` DESC
+      LIMIT 100;
   `;
 
   connection.query(query, function(err, rows, fields) {
@@ -67,119 +86,122 @@ const getTopMoviesWithKeyword = (req, res) => {
 };
 
 
-const getRecs = (req, res) => {
-  var inputMovie = req.params.movieName;
+const JobsPerTitleLocation = (req, res) => {
+  var inputTitle = req.query.title;
+  var inputLocation = req.query.location;
 
+  const query = `
+      SELECT \`gaTrackerData.empName\` AS company, \`header.jobTitle\` AS position, \`overview.industry\` AS industry, \`overview.sector\` AS sector
+      FROM glassdoor
+      WHERE \`header.jobTitle\` LIKE "%${inputTitle}%" AND \`map.location\` LIKE "%${inputLocation}%" 
+          AND \`gaTrackerData.empName\` <> "" AND  \`overview.industry\` <> "" AND  \`overview.sector\` <> ""
+      ORDER BY \`gaTrackerData.jobId.long\` DESC
+      LIMIT 100;
+  `;
+
+  connection.query(query, (err, rows, fields) => {
+    if (err) console.log(err);
+    else res.json(rows);
+  });
+};
+
+const getIndustries = (req, res) => {
+  console.log("getindustries routes");
   var query = `
+   SELECT DISTINCT \`overview.industry\` as industryName
+   from glassdoor 
+  `;
+
+connection.query(query, function(err, rows, fields) {
+  if (err) console.log(err);
+  else {
+    console.log(rows);
+    res.json(rows);
+  }
+});
+};
+
+const getSectors = (req, res) => {
+  var query = `
+   SELECT DISTINCT \`overview.sector\` as sectorName
+   from glassdoor 
+  `;
+
+connection.query(query, function(err, rows, fields) {
+  if (err) console.log(err);
+  else {
+    console.log(rows);
+    res.json(rows);
+  }
+});
+};
+
+const getSize = (req, res) => {
+  var query = `
+   SELECT DISTINCT \`overview.size\` as size
+   from glassdoor 
+  `;
+
+connection.query(query, function(err, rows, fields) {
+  if (err) console.log(err);
+  else {
+    console.log(rows);
+    res.json(rows);
+  }
+});
+};
+
+const filter = (req, res) => {
+  var industries = req.params.industries;
+  // var sectors = req.params.sectors;
+  // var size = req.params.sectors;
+  console.log(typeof industries);
+  console.log("in filter");
+  console.log(industries);
+
+  var industSplit= industries.split(",");
+  //console.log(industSplit);
+
+  var industryStr = "";
+  if (industSplit.length > 1) {
+   
+    for (var i = 1; i < industSplit.length; i++){
+      industryStr += " OR \`overview.industry\` = \"" + industSplit[i] + "\"";
+    }
+  }
+
+  var industryStr = "\"" + industSplit[0] + "\"" + industryStr;
+  console.log(industryStr);
+
+  console.log(industryStr);
   
-    WITH input_cast AS (
-      SELECT a.cast_id
-      FROM cast_in a JOIN movie b ON a.movie_id = b.movie_id
-      WHERE b.title = "${inputMovie}"
-    ), 
 
-  shared_cast AS (
-      SELECT c.movie_id, COUNT(i.cast_id) AS ct
-      FROM cast_in c INNER JOIN input_cast i ON c.cast_id = i.cast_id
-      GROUP BY c.movie_id
-      ORDER BY COUNT(i.cast_id) DESC
-    )
-
-    SELECT m.title, m.movie_id, m.rating, m.num_ratings
-    FROM shared_cast c JOIN movie m ON c.movie_id = m.movie_id
-    WHERE m.title != "${inputMovie}"
-    ORDER BY c.ct DESC, m.rating DESC, m.num_ratings DESC
-    LIMIT 10;
+  var query = `
+   SELECT \`gaTrackerData.empName\` as name, \`header.jobTitle\` as position, 
+   \`map.location\` as location 
+   from glassdoor 
+   WHERE \`overview.industry\` = ${industryStr}
   `;
+  console.log(query);
 
-  connection.query(query, function(err, rows, fields) {
-    if (err) console.log(err);
-    else {
-      console.log(rows);
-      res.json(rows);
-    }
-  });
+connection.query(query, function(err, rows, fields) {
+  if (err) console.log(err);
+  else {
+    console.log(rows);
+    res.json(rows);
+  }
+});
 };
 
-
-const getDecades = (req, res) => {
-  const query = `
-    SELECT CONCAT(LEFT(CAST(release_year AS varchar(4)), 3), '0') AS decade
-    FROM movie
-    GROUP BY LEFT(CAST(release_year AS varchar(4)), 3)
-    ORDER BY decade ASC;
-  `;
-
-  connection.query(query, (err, rows, fields) => {
-    if (err) console.log(err);
-    else res.json(rows);
-  });
-};
-
-
-const getGenres = (req, res) => {
-  const query = `
-    SELECT name
-    FROM genre
-    WHERE name <> 'genres'
-    ORDER BY name ASC;
-  `;
-
-  connection.query(query, (err, rows, fields) => {
-    if (err) console.log(err);
-    else res.json(rows);
-  });
-};
-
-
-const bestMoviesPerDecadeGenre = (req, res) => {
-  var inputDecade = req.query.decade;
-  // Delete last digit
-  inputDecadeFix = Math.floor(inputDecade / 10);
-
-  var inputGenre = req.query.genre;
-
-  const query = `
-    WITH genre_mean AS (
-      SELECT g.genre_name, AVG(m.rating) AS avg_rat
-      FROM movie_genre g JOIN movie m ON g.movie_id = m.movie_id
-      WHERE m.release_year LIKE "${inputDecadeFix}%"
-      GROUP BY g.genre_name 
-    ),
-
-    max_genre_avg AS (
-      SELECT g.movie_id, MAX(m.avg_rat) AS rat
-      FROM genre_mean m JOIN movie_genre g ON g.genre_name = m.genre_name
-      GROUP BY g.movie_id
-    ),
-
-    filtered_movies AS (
-        SELECT m.movie_id, m.title, m.rating, g.genre_name
-        FROM movie m JOIN movie_genre g ON g.movie_id = m.movie_id    
-        WHERE m.release_year LIKE "${inputDecadeFix}%" AND g.genre_name = "${inputGenre}"
-    )
-
-    SELECT m.movie_id, m.title, m.rating
-    FROM filtered_movies m JOIN max_genre_avg a ON m.movie_id = a.movie_id
-    WHERE m.rating > a.rat
-    ORDER BY m.title ASC
-    LIMIT 100;
-  `;
-
-  connection.query(query, (err, rows, fields) => {
-    if (err) console.log(err);
-    else res.json(rows);
-  });
-};
-
-*/
 
 module.exports = {
 	getTop10Companies: getTop10Companies,
   getTop10Locations: getTop10Locations,
-	//getTopMoviesWithKeyword: getTopMoviesWithKeyword,
-	//getRecs: getRecs,
-  //getDecades: getDecades,
-  //getGenres: getGenres,
-  //bestMoviesPerDecadeGenre: bestMoviesPerDecadeGenre
+	getTopJobsWithCompany: getTopJobsWithCompany,
+  getTopJobsWithLocation: getTopJobsWithLocation,
+  JobsPerTitleLocation: JobsPerTitleLocation,
+  getIndustries: getIndustries,
+  getSectors: getSectors,
+  getSize: getSize,
+  filter: filter
 };

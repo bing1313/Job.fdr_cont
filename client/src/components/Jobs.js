@@ -9,19 +9,19 @@ export default class Jobs extends React.Component {
 		super(props);
 
 		this.state = {
-			search: "",
+			title: "",
 			location: "",
 			searchOut: []
 		};
 
-		this.handleSearchChange = this.handleSearchChange.bind(this);
+		this.handleTitleChange = this.handleTitleChange.bind(this);
 		this.handleLocationChange = this.handleLocationChange.bind(this);
 		this.submitSearch = this.submitSearch.bind(this);
 	};
 
-	handleSearchChange(e) {
+	handleTitleChange(e) {
 		this.setState({
-			search: e.target.value
+			title: e.target.value
 		});
 	};
 
@@ -32,7 +32,7 @@ export default class Jobs extends React.Component {
 	};
 
 	submitSearch() {
-		fetch("http://localhost:8081/jobs/" + this.state.search, 
+		fetch("http://localhost:8081/jobs?title=" + this.state.title + "&location=" + this.state.location, 
     	{
 			method: 'GET'
 		}).then(res => {
@@ -44,10 +44,10 @@ export default class Jobs extends React.Component {
 
 			const searchDivs = searchList.map((searchObj, i) =>
 				<JobsRow
-            		company={searchObj.title}
-					position={searchObj.movie_id}
-              		location={searchObj.rating}
-              		date={searchObj.num_ratings}
+            		company={searchObj.company}
+					position={searchObj.position}
+              		industry={searchObj.industry}
+              		sector={searchObj.sector}
           		/>
 			);
 
@@ -70,9 +70,9 @@ export default class Jobs extends React.Component {
 					<div className="jumbotron">
 						<p>Search for available job openings</p>
 						<div className="search-container">
-						<input type="text" class="search-keyword" placeholder="Title or Company" value={this.state.search} onChange={this.handleSearchChange} /*id="search" className="search-input"*//>
-						<input type="text" class="search-location" placeholder="Location" value={this.state.location} onChange={this.handleLocationChange} /*id="location" className="search-input"*//>
-						<button type="submitMovieBtn" class="submit-btn" onClick={this.submitSearch}>Search</button>
+						<input type="text" className="search-title" placeholder="Title" value={this.state.title} onChange={this.handleTitleChange} /*id="search" className="search-input"*//>
+						<input type="text" className="search-location" placeholder="Location" value={this.state.location} onChange={this.handleLocationChange} /*id="location" className="search-input"*//>
+						<button type="submitSearchBtn" class="submit-btn" onClick={this.submitSearch}>Search</button>
 						</div>
 					</div>
 
@@ -82,8 +82,8 @@ export default class Jobs extends React.Component {
 							<div className="headers">
 								<div className="header"><strong>Company</strong></div>
 								<div className="header"><strong>Position</strong></div>
-								<div className="header"><strong>Location</strong></div>
-								<div className="header"><strong>Date Posted</strong></div>
+								<div className="header"><strong>Industry</strong></div>
+								<div className="header"><strong>Sector</strong></div>
 							</div>
 						</div>
 						<div className="results-container" id="results">

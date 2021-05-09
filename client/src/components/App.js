@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import Jobs from './Jobs';
-import MyApplications from './MyApplications';
+import Explore from './Explore';
 
 export default class App extends React.Component {
 
@@ -31,7 +31,7 @@ export default class App extends React.Component {
 						/>
 						<Route
 							path="/applications"
-							render={() => <MyApplications />}
+							render={() => <Explore />}
 						/>
 					</Switch>
 				</Router>

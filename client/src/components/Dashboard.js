@@ -16,7 +16,8 @@ export default class Dashboard extends React.Component {
       jobs: []
     };
 
-    this.showJobs = this.showJobs.bind(this);
+    this.showJobsByCompany = this.showJobsByCompany.bind(this);
+    this.showJobsByLocation = this.showJobsByLocation.bind(this);
   };
 
   componentDidMount() {
@@ -25,19 +26,17 @@ export default class Dashboard extends React.Component {
       crossDomain: true,
       method: 'GET' 
     }).then(res => {
-      console.log("fetched companies")
       return res.json();
     }, err => {
       console.log(err);
     }).then(companiesList => {
-      console.log(companiesList)
       if (!companiesList) return;
 
       const companiesDivs = companiesList.map((companyObj, i) =>
         <KeywordButtonCompany
-          id={"button-" + companyObj.companyName} 
-          onClick={() => this.showJobs(companyObj.companyName)} 
-          company={companyObj.companyName} 
+          id={"button-" + companyObj.company} 
+          onClick={() => this.showJobsByCompany(companyObj.company)} 
+          company={companyObj.company} 
         /> 
       );
 
@@ -56,14 +55,13 @@ export default class Dashboard extends React.Component {
     }, err => {
       console.log(err);
     }).then(locationsList => {
-      console.log(locationsList)
       if (!locationsList) return;
 
       const locationsDivs = locationsList.map((locationObj, i) =>
         <KeywordButtonLocation 
-          id={"button-" + locationObj.city} 
-          onClick={() => this.showJobs(locationObj.city)} 
-          location={locationObj.city} 
+          id={"button-" + locationObj.location} 
+          onClick={() => this.showJobsByLocation(locationObj.location)} 
+          location={locationObj.location} 
         /> 
       );
 
@@ -77,9 +75,9 @@ export default class Dashboard extends React.Component {
 
   };
 
-  showJobs(keyword) {
+  showJobsByCompany(company) {
 
-    fetch("https://localhost:3000/keywords/" + keyword, 
+    fetch("http://localhost:8081/keywords/companies/" + company, 
     {
 			method: 'GET'
 		}).then(res => {
@@ -87,13 +85,45 @@ export default class Dashboard extends React.Component {
     }, err => {
       console.log(err);
     }).then(jobList => {
+      console.log(jobList)
       if (!jobList) return;
 
 				const jobsDivs = jobList.map((jobObj, i) =>
 					<DashboardResultRow
-              company={jobObj.title}
-              position={jobObj.rating}
-              location={jobObj.num_ratings}
+              company={jobObj.company}
+              position={jobObj.position}
+              location={jobObj.location}
+              industry={jobObj.industry}
+          />
+				);
+
+      this.setState({
+        jobs: jobsDivs
+      });
+    }, err => {
+      console.log(err);
+    });
+  };
+
+  showJobsByLocation(location) {
+
+    fetch("http://localhost:8081/keywords/locations/" + location, 
+    {
+			method: 'GET'
+		}).then(res => {
+      return res.json();
+    }, err => {
+      console.log(err);
+    }).then(jobList => {
+      console.log(jobList)
+      if (!jobList) return;
+
+				const jobsDivs = jobList.map((jobObj, i) =>
+					<DashboardResultRow
+              company={jobObj.company}
+              position={jobObj.position}
+              location={jobObj.location}
+              industry={jobObj.industry}
           />
 				);
 
@@ -136,7 +166,7 @@ export default class Dashboard extends React.Component {
                 <div className="header"><strong>Company</strong></div>
                 <div className="header-lg"><strong>Position</strong></div>
                 <div className="header"><strong>Location</strong></div>
-                <div className="header"><strong>Date Posted</strong></div>
+                <div className="header"><strong>Industry</strong></div>
               </div>
               <div className="results-container" id="results">
                 {this.state.jobs}
