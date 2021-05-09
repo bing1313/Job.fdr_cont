@@ -1,12 +1,13 @@
 const config = require('./db-config.js');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 config.connectionLimit = 10;
 const connection = mysql.createPool(config);
 
 const getTop10Companies = (req, res) => {
+  console.log('getting companies....')
   var query = `
-      SELECT empName
+      SELECT gaTrackerData.empName as companyName 
       FROM (SELECT gaTrackerData.empName, COUNT(*) as numJobs 
       FROM glassdoor 
       WHERE gaTrackerData.empName is not null 

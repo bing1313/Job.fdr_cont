@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
 import KeywordButton from './KeywordButton';
 import DashboardResultRow from './DashboardResultRow';
+import axios from 'axios'
 
 export default class Dashboard extends React.Component {
   constructor(props) {
@@ -19,21 +20,27 @@ export default class Dashboard extends React.Component {
   };
 
   componentDidMount() {
+    axios.get('http://localhost:8081/keywords/companies').then((err, data) => {
+      console.log(data)
+    })
+    console.log("mountain")
     fetch("http://localhost:8081/keywords/companies",
     {
       method: 'GET' 
     }).then(res => {
+      console.log("fetched companies")
       return res.json();
     }, err => {
       console.log(err);
     }).then(companiesList => {
+      console.log(companiesList)
       if (!companiesList) return;
 
       const companiesDivs = companiesList.map((companyObj, i) =>
         <KeywordButton 
-          id={"button-" + companyObj.empName} 
-          onClick={() => this.showJobs(companyObj.empName)} 
-          company={companyObj.empName} 
+          id={"button-" + companyObj.companyName} 
+          onClick={() => this.showJobs(companyObj.companyName)} 
+          company={companyObj.companyName} 
         /> 
       );
 
@@ -68,11 +75,13 @@ export default class Dashboard extends React.Component {
     }, err => {
       console.log(err);
     });
+
+
   };
 
-  showMovies(keyword) {
+  showJobs(keyword) {
 
-    fetch("http://localhost:8081/keywords/" + keyword, 
+    fetch("https://localhost:8081/keywords/" + keyword, 
     {
 			method: 'GET'
 		}).then(res => {
@@ -104,7 +113,7 @@ export default class Dashboard extends React.Component {
 
         <PageNavbar active="dashboard" />
 
-        <div class="intro-header">
+        <div className="intro-header">
             <h1>Welcome to job.fndr!</h1>
             <h4>Take a look at some of our featured jobs</h4>
         </div>
@@ -114,12 +123,12 @@ export default class Dashboard extends React.Component {
           <div className="jumbotron">
             <div className="h4">Top Companies</div>
             <div className="keywords-container">
-              {this.state.keywords}
+              {this.state.companies}
             </div>
             <br />
             <div className="h4">Top Locations</div>
             <div className="keywords-container">
-              {this.state.keywords}
+              {this.state.locations}
             </div>
           </div>
 
@@ -132,7 +141,7 @@ export default class Dashboard extends React.Component {
                 <div className="header"><strong>Date Posted</strong></div>
               </div>
               <div className="results-container" id="results">
-                {this.state.movies}
+                {this.state.jobs}
               </div>
             </div>
           </div>
