@@ -10,39 +10,15 @@ export default class Dashboard extends React.Component {
     super(props);
 
     this.state = {
-      keywords: [],
-      movies: []
+      locations: [],
+      companies: [],
+      jobs: []
     };
 
-    this.showMovies = this.showMovies.bind(this);
+    this.showJobs = this.showJobs.bind(this);
   };
 
   componentDidMount() {
-    fetch("http://localhost:8081/keywords/locations",
-    {
-      method: 'GET' 
-    }).then(res => {
-      return res.json();
-    }, err => {
-      console.log(err);
-    }).then(keywordsList => {
-      if (!keywordsList) return;
-
-      const keywordsDivs = keywordsList.map((keywordObj, i) =>
-        <KeywordButton 
-          id={"button-" + keywordObj.kwd_name} 
-          onClick={() => this.showMovies(keywordObj.kwd_name)} 
-          keyword={keywordObj.kwd_name} 
-        /> 
-      );
-
-      this.setState({
-        keywords: keywordsDivs
-      });
-    }, err => {
-      console.log(err);
-    });
-
     fetch("http://localhost:8081/keywords/companies",
     {
       method: 'GET' 
@@ -50,19 +26,44 @@ export default class Dashboard extends React.Component {
       return res.json();
     }, err => {
       console.log(err);
-    }).then(keywordsList => {
-      if (!keywordsList) return;
+    }).then(companiesList => {
+      if (!companiesList) return;
 
-      const keywordsDivs = keywordsList.map((keywordObj, i) =>
+      const companiesDivs = companiesList.map((companyObj, i) =>
         <KeywordButton 
-          id={"button-" + keywordObj.kwd_name} 
-          onClick={() => this.showMovies(keywordObj.kwd_name)} 
-          keyword={keywordObj.kwd_name} 
+          id={"button-" + companyObj.empName} 
+          onClick={() => this.showJobs(companyObj.empName)} 
+          company={companyObj.empName} 
         /> 
       );
 
       this.setState({
-        keywords: keywordsDivs
+        companies: companiesDivs
+      });
+    }, err => {
+      console.log(err);
+    });
+
+    fetch("http://localhost:8081/keywords/locations",
+    {
+      method: 'GET' 
+    }).then(res => {
+      return res.json();
+    }, err => {
+      console.log(err);
+    }).then(locationsList => {
+      if (!locationsList) return;
+
+      const locationsDivs = locationsList.map((locationObj, i) =>
+        <KeywordButton 
+          id={"button-" + locationObj.city} 
+          onClick={() => this.showJobs(locationObj.city)} 
+          location={locationObj.city} 
+        /> 
+      );
+
+      this.setState({
+        locations: locationsDivs
       });
     }, err => {
       console.log(err);
@@ -78,24 +79,21 @@ export default class Dashboard extends React.Component {
       return res.json();
     }, err => {
       console.log(err);
-    }).then(movieList => {
-      if (!movieList) return;
+    }).then(jobList => {
+      if (!jobList) return;
 
-        // Map each movie in this.state.movies to an HTML element as a new DashboardMovieRow:
-				const moviesDivs = movieList.map((movieObj, i) =>
+				const jobsDivs = jobList.map((jobObj, i) =>
 					<DashboardResultRow
-              title={movieObj.title}
-              rating={movieObj.rating}
-              votes={movieObj.num_ratings}
+              company={jobObj.title}
+              position={jobObj.rating}
+              location={jobObj.num_ratings}
           />
 				);
 
-		  // Set the state of the movie list to the value returned by the HTTP response from the server.
       this.setState({
-        movies: moviesDivs
+        jobs: jobsDivs
       });
     }, err => {
-      // Print the error if there is one.
       console.log(err);
     });
   };
@@ -114,12 +112,12 @@ export default class Dashboard extends React.Component {
         <br />
         <div className="container query-container">
           <div className="jumbotron">
-            <div className="h4">Top Locations</div>
+            <div className="h4">Top Companies</div>
             <div className="keywords-container">
               {this.state.keywords}
             </div>
             <br />
-            <div className="h4">Top Companies</div>
+            <div className="h4">Top Locations</div>
             <div className="keywords-container">
               {this.state.keywords}
             </div>
