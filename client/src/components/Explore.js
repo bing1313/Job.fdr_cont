@@ -423,7 +423,7 @@ export default class Explore extends React.Component {
 					<div className="jumbotron">
 						<div className="header-container">
 							<div className="headers">
-			          <div className="header"><strong>Company</strong></div>
+			          <div className="header company-title"><strong>Company</strong></div>
 			          <div className="header"><strong>Position</strong></div>
 					  <div className="header"><strong>Location</strong></div>
 			        </div>

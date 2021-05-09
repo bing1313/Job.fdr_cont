@@ -58,6 +58,7 @@
 
 .explore-category{
   font-size: 25px;
+  margin-left: 60px;
 }
 
 #sizeDropdown{
@@ -65,7 +66,7 @@
 }
 
 .input-box{
-  margin-left: 40px;
+  margin-left: 60px;
 }
 
 .filBut{
@@ -105,3 +106,8 @@
   margin-top: 10px;
   color: darkblue;
 }
+
+.company-title, .results-container{
+  margin-left: 100px;
+}
+
