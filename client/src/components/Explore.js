@@ -322,8 +322,18 @@ export default class Explore extends React.Component {
 		}).then(jobsList => {
 			if(!jobsList) return;
 
-			
-			const jobDivs = jobsList.map((jobObj, i) =>
+			if (jobsList.length == 0){
+				console.log("empty");
+				const noReults = <ExploreRow 
+				position={"No Results :("}
+				
+			   />
+
+			   this.setState({
+				jobs: noReults
+				});
+			} else {
+				const jobDivs = jobsList.map((jobObj, i) =>
 				<ExploreRow 
 				 company={jobObj.name}
 				 position={jobObj.position}
@@ -334,6 +344,10 @@ export default class Explore extends React.Component {
 			this.setState({
 				jobs: jobDivs
 			});
+
+			}
+
+			
 		}, err => {
 			console.log(err);
 		});
