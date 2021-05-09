@@ -31,6 +31,35 @@ export default class MyApplications extends React.Component {
 
 	/* ---- Q3a (Best Movies) ---- */
 	componentDidMount() { 
+
+		// Send an HTTP request to the server.
+		fetch("http://localhost:8081/filter",
+		{
+			method: 'GET' // The type of HTTP request.
+		  }).then(res => {
+			// Convert the response data to a JSON.
+			return res.json();
+		  }, err => {
+			// Print the error if there is one.
+			console.log(err);
+		  }).then(decadesList => {
+			if (!decadesList) return;
+
+	 		// Map each decade in this.state.decades to an HTML element:
+			const decadesDivs = decadesList.map((decadeObj, i) =>
+			<option className="decadesOption" key={i} value={decadeObj.decade}>{decadeObj.decade}</option>
+			);
+	  
+			// Set the state of the decade list to the value returned by the HTTP response from the server.
+			this.setState({
+			  decades: decadesDivs
+			});
+		  }, err => {
+			// Print the error if there is one.
+			console.log(err);
+		  }); 
+
+		
 		// Send an HTTP request to the server.
 		fetch("http://localhost:8081/decades",
 		{
@@ -260,6 +289,10 @@ export default class MyApplications extends React.Component {
 		  }); 
 	};
 
+	submitFilters() {
+		
+	}
+
 	render() {
 		return (
 			<div className="MyApplications">
@@ -280,7 +313,7 @@ export default class MyApplications extends React.Component {
 						</div>
 
 						<div className="h5">Industry</div>
-						<div className="industy-dropdown-container">
+						<div className="industry-dropdown-container">
 							<input type="text" name="industry-input"
 								onChange={this.handleIndustryInputChange}/>
 								{this.showSuggestions()}
@@ -296,6 +329,12 @@ export default class MyApplications extends React.Component {
 									
 								)
 							})}
+						</div>
+
+						<div className="h5">Salary</div>
+						<div className="salary-container">
+							
+							
 						</div>
 
 						<button className="filter-submit-btn" id="filter-submitBtn" onClick={this.submitDecadeGenre}>Submit</button>
