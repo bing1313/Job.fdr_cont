@@ -40,6 +40,12 @@
   border: 1px solid #1abc9c;
   border-radius: 30px;
   font-size: 20px;
+  margin-left: 5%;
+}
+
+.filter-submit-btn:hover{
+  background-color: #aae6cc;
+  color:teal;
 }
 
 .explore-title{
@@ -70,6 +76,13 @@
   font-size: 18px;
   padding-left: 4%;
   padding-right: 4%;
+  border: none;
+  color:black
+}
+
+.filBut:hover{
+  background-color: #aae6cc;
+  color: teal;
 }
 
 .sector-container, .industry-container, .size-cont {
