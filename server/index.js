@@ -16,18 +16,12 @@ app.get('/keywords/companies', routes.getTop10Companies);
 app.get('/keywords/companies/:company', routes.getTopJobsWithCompany);
 app.get('/keywords/locations/:location', routes.getTopJobsWithLocation);
 
-app.get('/industries', routes.getIndustries);
-app.get('/sectors', routes.getSectors);
-app.get('/size', routes.getSize);
-app.get('/filters/:industries', routes.filter); ///:sectors/:size
-
-
 app.get('/jobs', routes.JobsPerTitleLocation);
 
 app.get('/industries', routes.getIndustries);
 app.get('/sectors', routes.getSectors);
 app.get('/size', routes.getSize);
-app.get('/filters/:industries', routes.filter);
+app.get('/filters/:industries', routes.filter); ///:sectors/:size
 
 
 app.listen(8081, () => {

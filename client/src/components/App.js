@@ -30,7 +30,7 @@ export default class App extends React.Component {
 							render={() => <Jobs />}
 						/>
 						<Route
-							path="/applications"
+							path="/explore"
 							render={() => <Explore />}
 						/>
 					</Switch>
