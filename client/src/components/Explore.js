@@ -417,7 +417,7 @@ export default class Explore extends React.Component {
 						<div className="h5  explore-category">Industry</div>
 							
 								<input type="text" name="industry-input" className="input-box" placeholder="search industries"
-									onChange={this.handleIndustryInputChange}/><button onClick={this.showAllIndustries}> Show All</button><button onClick={this.HideAllIndustries}>Hide</button>
+									onChange={this.handleIndustryInputChange}/><button className="green" onClick={this.showAllIndustries}> Show All</button><button className="green" onClick={this.HideAllIndustries}>Hide</button>
 									{this.showSuggestions()}
 							
 							
@@ -437,7 +437,7 @@ export default class Explore extends React.Component {
 							<div className="h5 explore-category">Sector</div>
 							
 								<input type="text" name="sector-input" className="input-box" placeholder="search sectors"
-									onChange={this.handleSectorInputChange}/> <button onClick={this.showAllSectors}> Show All</button><button onClick={this.HideAllSectors}> Hide</button>
+									onChange={this.handleSectorInputChange}/> <button className="green" onClick={this.showAllSectors}> Show All</button><button className="green" onClick={this.HideAllSectors}> Hide</button>
 									{this.showSectorSuggestions()}
 								
 							<div className="selected-sectors">
@@ -473,7 +473,7 @@ export default class Explore extends React.Component {
 			          <div className="header"><strong>Position</strong></div>
 					  <div className="header"><strong>Location</strong></div>
 			        </div>
-			        <div className="results-container" id="results">
+			        <div className="results-container explore-page-results" id="results">
 			          {this.state.jobs}
 			        </div>
 			      </div>
